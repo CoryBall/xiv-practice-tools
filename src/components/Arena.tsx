@@ -104,11 +104,12 @@ export function Arena() {
     [status, handleClick],
   )
 
-  // Coordinate inspector
+  // Coordinate inspector (dev only)
   const [cursor, setCursor] = useState<Vec2 | null>(null)
   const [copied, setCopied] = useState(false)
 
   const onMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!import.meta.env.DEV) return
     const rect = e.currentTarget.getBoundingClientRect()
     setCursor({
       x: Math.max(0, Math.min(1, (e.clientX - rect.left) / SCALE)),
@@ -120,6 +121,7 @@ export function Arena() {
 
   const onWrapperClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!import.meta.env.DEV) return
       if (status !== 'idle') return  // game clicks handled by Pixi
       const rect = e.currentTarget.getBoundingClientRect()
       const pos = {
