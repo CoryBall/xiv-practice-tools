@@ -1,4 +1,4 @@
-import { Hazard, Rect, Role, Strategy, Variant, Vec2 } from "../../../engine/types";
+import { Hazard, Role, Strategy, Variant, Vec2 } from "../../../engine/types";
 import { randomizeArray } from "../../../utils/arrays";
 import { rectHitTest } from "../../../utils/geometry";
 
@@ -222,24 +222,24 @@ const OuterStrategy: Strategy<SplitArenaState, ArenaSplitVariant> = {
  ],
 }
 
-type Platform_Position = 'TopLeft' | 'TopRight' | 'BottomLeft' | 'BottomRight';
-const TOWER_SAFE_SPOTS: Record<Platform_Position, { samePlatform: Rect, otherPlatform: Rect }> = {
-    'TopLeft': {
-        samePlatform: { x1: 0.175, x2: 0.23, y1: 0.15, y2: 0.3 },
-        otherPlatform: { x1: 0.25, x2: 0.275, y1: 0.2, y2: 0.275 },
-    },
-    'TopRight': {
-        samePlatform: { x1: 0.77, x2: 0.83, y1: 0.15, y2: 0.3 },
-        otherPlatform: { x1: 0.725, x2: 0.75, y1: 0.2, y2: 0.275 },
-    },
-    'BottomLeft': {
-        samePlatform: { x1: 0.175, x2: 0.23, y1: 0.7, y2: 0.85 },
-        otherPlatform: { x1: 0.25, x2: 0.275, y1: 0.725, y2: 0.8 },
-    },
-    'BottomRight': {
-        samePlatform: { x1: 0.77, x2: 0.83, y1: 0.7, y2: 0.85 },
-        otherPlatform: { x1: 0.725, x2: 0.75, y1: 0.725, y2: 0.8 },
-    },
-}
+// type Platform_Position = 'TopLeft' | 'TopRight' | 'BottomLeft' | 'BottomRight';
+// const TOWER_SAFE_SPOTS: Record<Platform_Position, { samePlatform: Rect, otherPlatform: Rect }> = {
+//     'TopLeft': {
+//         samePlatform: { x1: 0.175, x2: 0.23, y1: 0.15, y2: 0.3 },
+//         otherPlatform: { x1: 0.25, x2: 0.275, y1: 0.2, y2: 0.275 },
+//     },
+//     'TopRight': {
+//         samePlatform: { x1: 0.77, x2: 0.83, y1: 0.15, y2: 0.3 },
+//         otherPlatform: { x1: 0.725, x2: 0.75, y1: 0.2, y2: 0.275 },
+//     },
+//     'BottomLeft': {
+//         samePlatform: { x1: 0.175, x2: 0.23, y1: 0.7, y2: 0.85 },
+//         otherPlatform: { x1: 0.25, x2: 0.275, y1: 0.725, y2: 0.8 },
+//     },
+//     'BottomRight': {
+//         samePlatform: { x1: 0.77, x2: 0.83, y1: 0.7, y2: 0.85 },
+//         otherPlatform: { x1: 0.725, x2: 0.75, y1: 0.725, y2: 0.8 },
+//     },
+// }
 
 export default OuterStrategy;
