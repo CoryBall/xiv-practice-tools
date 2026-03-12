@@ -204,6 +204,10 @@ export const useSimulator = create<SimulatorStore>((set, get) => ({
       wasCorrect: correct,
       status: 'showing-result',
     })
+
+    if (correct && phase.autoAdvance) {
+      setTimeout(() => get().nextPhase(), 800)
+    }
   },
 
   nextPhase: () => {
@@ -211,6 +215,8 @@ export const useSimulator = create<SimulatorStore>((set, get) => ({
       variantHistory,
       variant,
       state,
+      userClick,
+      wasCorrect,
       selectedEncounterId,
       selectedMechanicId,
       selectedStrategyId,
@@ -232,7 +238,7 @@ export const useSimulator = create<SimulatorStore>((set, get) => ({
 
     // Let the current phase transform the state before the next phase loads
     const currentPhase = strategy.phases[phaseIndex]!
-    const nextState = currentPhase.updateState ? currentPhase.updateState(state, variant, selectedRole) : state
+    const nextState = currentPhase.updateState ? currentPhase.updateState(state, variant, selectedRole, userClick, wasCorrect ?? false) : state
 
     const nextPhase = strategy.phases[nextIndex]!
     const nextVariant = nextPhase.rollVariant ? nextPhase.rollVariant(variantHistory) : null

@@ -61,7 +61,7 @@ export function Arena() {
   const allHazards = useMemo(() => {
     const phaseHazards = currentPhase ? currentPhase.hazards(variant, state) : []
     const hintHazards =
-      showHints && variant && selectedRole && currentPhase?.getHints
+      showHints && selectedRole && currentPhase?.getHints
         ? currentPhase.getHints(variant, selectedRole, state).map((h) => ({
             color: '#aaaaaa',
             opacity: 0.35,

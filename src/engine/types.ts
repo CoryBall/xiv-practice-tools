@@ -84,12 +84,14 @@ export interface Phase<TState = unknown, TVariant extends Variant | null | unkno
    */
   isCorrect?: (click: Vec2, variant: TVariant | null, role: Role, state: TState) => boolean
   tolerance?: number // default 0.1 — ignored when isCorrect is provided
+  /** When true, automatically advances to the next phase after a correct click (with a brief delay). */
+  autoAdvance?: boolean
   /**
    * Called at the end of this phase (before the next one loads) to produce the
    * state object that feeds into all subsequent phases. Return a new object —
    * do not mutate the input.
    */
-  updateState?: (state: TState, variant: TVariant | null, role: Role) => TState
+  updateState?: (state: TState, variant: TVariant | null, role: Role, click: Vec2 | null, wasCorrect: boolean) => TState
   /** Overrides boss positions for this phase only. */
   bosses?: Boss[]
 }
