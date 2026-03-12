@@ -1,0 +1,246 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #0d0d1a;
+  color: #e0e0ff;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-header {
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #333366;
+  background: #111128;
+}
+
+.app-header h1 {
+  font-size: 1.5rem;
+  color: #aab8ff;
+  letter-spacing: 0.05em;
+}
+
+.app-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+/* Selector */
+.selector {
+  width: 100%;
+  max-width: 500px;
+  background: #111128;
+  border: 1px solid #333366;
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.selector h2 {
+  font-size: 1.1rem;
+  color: #aab8ff;
+  margin-bottom: 0.25rem;
+}
+
+.selector-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.selector-row label {
+  font-size: 0.8rem;
+  color: #8888bb;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.selector-row select {
+  background: #1a1a2e;
+  color: #e0e0ff;
+  border: 1px solid #444477;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+.selector-row select:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.role-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.4rem;
+}
+
+.role-btn {
+  background: #1a1a2e;
+  color: #e0e0ff;
+  border: 1px solid #444477;
+  border-radius: 4px;
+  padding: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.role-btn:hover {
+  background: #2a2a4e;
+  border-color: #6666aa;
+}
+
+.role-btn.active {
+  background: #3333aa;
+  border-color: #7777dd;
+  color: #ffffff;
+}
+
+.start-btn {
+  background: #2244aa;
+  color: #ffffff;
+  border: 1px solid #4466cc;
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.15s;
+  margin-top: 0.5rem;
+}
+
+.start-btn:hover:not(:disabled) {
+  background: #3355cc;
+}
+
+.start-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+/* Game area */
+.game-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.arena-wrapper {
+  position: relative;
+  border: 2px solid #333366;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(68, 68, 170, 0.3);
+  cursor: crosshair;
+}
+
+.arena-coords {
+  position: absolute;
+  bottom: 6px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #aab8ff;
+  font-family: monospace;
+  font-size: 0.75rem;
+  padding: 2px 7px;
+  border-radius: 3px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.arena-coords-copied {
+  color: #44ff88;
+}
+
+/* HUD */
+.hud {
+  width: 600px;
+  background: #111128;
+  border: 1px solid #333366;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.hud-variant {
+  font-size: 0.85rem;
+  color: #8888bb;
+}
+
+.hud-prompt {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #e0e0ff;
+}
+
+.hud-phase-counter {
+  font-size: 0.85rem;
+  color: #8888bb;
+}
+
+.hud-result {
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+}
+
+.hud-result.correct {
+  background: rgba(68, 255, 68, 0.15);
+  color: #44ff88;
+  border: 1px solid rgba(68, 255, 68, 0.3);
+}
+
+.hud-result.wrong {
+  background: rgba(255, 68, 68, 0.15);
+  color: #ff8888;
+  border: 1px solid rgba(255, 68, 68, 0.3);
+}
+
+.hud-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.hud-btn {
+  background: #2244aa;
+  color: #ffffff;
+  border: 1px solid #4466cc;
+  border-radius: 6px;
+  padding: 0.6rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.hud-btn:hover {
+  background: #3355cc;
+}
+
+.hud-complete {
+  font-size: 1rem;
+  color: #aab8ff;
+}
