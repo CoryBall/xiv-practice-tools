@@ -66,8 +66,8 @@ export function HUD() {
           </button>
         )}
         {status === 'showing-result' && isLastPhase && (
-          <button className="hud-btn" onClick={nextPhase}>
-            Finish
+          <button className="hud-btn" onClick={wasCorrect ? nextPhase : reset}>
+            {wasCorrect ? 'Finish' : 'Try Again'}
           </button>
         )}
         {status === 'complete' && (
