@@ -109,7 +109,7 @@ export function Arena() {
   const [copied, setCopied] = useState(false)
 
   const onMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!import.meta.env.DEV) return
+    if (!import.meta.env.DEV || status === 'idle') { setCursor(null); return }
     const rect = e.currentTarget.getBoundingClientRect()
     setCursor({
       x: Math.max(0, Math.min(1, (e.clientX - rect.left) / SCALE)),
