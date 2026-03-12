@@ -63,6 +63,7 @@ export const CLONE_RULES: CloneRule[] = [
   { kind: 'mechanic', mechType: 'stack', direction: 'CCW' }, // 7: NW → stack, CCW
 ]
 
-// Boss clone scan order (skipping NE=0 and NW=5, the two nearest to D waymark)
-export const CW_ORDER  = [1, 2, 3] // E → SE → SW
-export const CCW_ORDER = [4, 3, 2] // W → SW → SE
+// Full scan order from N — group 2 goes CW, group 1 goes CCW
+// Scanning all 6 ensures correct priority even when two same-mechanic clones land on the same side
+export const CW_ORDER  = [0, 1, 2, 3, 4, 5] // NE → E → SE → SW → W → NW
+export const CCW_ORDER = [5, 4, 3, 2, 1, 0] // NW → W → SW → SE → E → NE

@@ -59,6 +59,26 @@ export function computePhase2(
   }
 }
 
+export function computeGroups(playerPositions: Replication2State['playerPositions']): {
+  group1Players: Role[]
+  group2Players: Role[]
+} {
+  const group1Players: Role[] = []
+  const group2Players: Role[] = []
+
+  for (const { role, pos } of playerPositions) {
+    const slotIdx = CLONE_POSITIONS.findIndex(p => p.x === pos.x && p.y === pos.y)
+    const rule = CLONE_RULES[slotIdx]
+    if (!rule || rule.kind === 'stay' || (rule.kind === 'mechanic' && rule.direction === 'CCW')) {
+      group1Players.push(role)
+    } else {
+      group2Players.push(role)
+    }
+  }
+
+  return { group1Players, group2Players }
+}
+
 export function buildInitialPlayerPositions(): Replication2State['playerPositions'] {
   return [
     { role: 'MT', pos: { x: 0.5,  y: 0.4   } },

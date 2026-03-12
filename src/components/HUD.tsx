@@ -50,6 +50,9 @@ export function HUD() {
       )}
 
       <div className="hud-actions">
+        <button className="hud-btn" onClick={reset}>
+          Try Again
+        </button>
         {currentPhase?.getHints && (
           <button className="hud-btn hud-btn-hint" onClick={toggleHints}>
             {showHints ? 'Hide Hints' : 'Show Hints'}
@@ -65,14 +68,14 @@ export function HUD() {
             Next Phase
           </button>
         )}
-        {status === 'showing-result' && isLastPhase && (
-          <button className="hud-btn" onClick={wasCorrect ? nextPhase : reset}>
-            {wasCorrect ? 'Finish' : 'Try Again'}
+        {status === 'showing-result' && isLastPhase && wasCorrect && (
+          <button className="hud-btn" onClick={nextPhase}>
+            Finish
           </button>
         )}
         {status === 'complete' && (
           <button className="hud-btn" onClick={reset}>
-            Try Again
+            Play Again
           </button>
         )}
       </div>

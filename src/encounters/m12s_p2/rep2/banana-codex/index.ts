@@ -10,7 +10,7 @@ import {
   CLONE_POSITIONS,
   CLONE_RADIUS,
 } from "./constants";
-import { buildInitialPlayerPositions, computePhase2, shuffle } from "./logic";
+import { buildInitialPlayerPositions, computeGroups, computePhase2, shuffle } from "./logic";
 import type { Replication2State } from "./types";
 
 const BananaCodex: Strategy<Replication2State> = {
@@ -119,6 +119,24 @@ const BananaCodex: Strategy<Replication2State> = {
       ],
       isCorrect: (click, _, role, state) =>
         !!state && distance(click, state.phase2Assignments[role]) <= CLONE_RADIUS,
+      updateState: (state, _variant, role, click, wasCorrect) => {
+        const playerPositions = ALL_ROLES.map((r) => ({
+          role: r,
+          pos: r === role
+            ? (wasCorrect ? state!.phase2Assignments[r] : (click ?? state!.phase2Assignments[r]))
+            : state!.phase2Assignments[r],
+        }))
+        const { group1Players, group2Players } = computeGroups(state!.playerPositions)
+        return { ...state!, group1Players, group2Players, playerPositions }
+      },
+      autoAdvance: true,
+    },
+    {
+      id: 'phase-3',
+      prompt: 'TODO: phase 3',
+      setPlayerPositions: (_, state) => state!.playerPositions,
+      hazards: () => [],
+      getSolution: () => BOSS_CENTER,
     },
   ],
 }
