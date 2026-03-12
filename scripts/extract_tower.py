@@ -4,8 +4,8 @@ import numpy as np
 from PIL import Image, ImageFilter
 import math, os
 
-SRC = os.path.normpath(os.path.join(os.path.dirname(__file__), "../public/hazards/image.png"))
-OUT = os.path.normpath(os.path.join(os.path.dirname(__file__), "../public/hazards/knockback_tower.png"))
+SRC = os.path.normpath(os.path.join(os.path.dirname(__file__), "../public/assets/hazards/image.png"))
+OUT = os.path.normpath(os.path.join(os.path.dirname(__file__), "../public/assets/hazards/knockback_tower.png"))
 
 img = Image.open(SRC).convert("RGBA")
 arr = np.array(img, dtype=np.uint8)

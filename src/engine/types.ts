@@ -127,7 +127,7 @@ export interface EncounterDef {
   id: string
   name: string
   partySize: 4 | 8
-  /** Path to a background image, relative to /public. E.g. '/arenas/m11s.png' */
+  /** Path to a background image, relative to /public. E.g. '/assets/arenas/m11s.png' */
   arenaImage?: string
   /** Default boss positions. If omitted, a single boss is shown centered at (0.5, 0.5). */
   bosses?: Boss[]

@@ -20,14 +20,14 @@ const WAYMARK_COLORS: Record<WaymarkId, number> = {
 }
 
 const WAYMARK_PATHS: Record<WaymarkId, string> = {
-  '1': '/waymarks/1.png',
-  '2': '/waymarks/2.png',
-  '3': '/waymarks/3.png',
-  '4': '/waymarks/4.png',
-  A: '/waymarks/A.png',
-  B: '/waymarks/B.png',
-  C: '/waymarks/C.png',
-  D: '/waymarks/D.png',
+  '1': '/assets/waymarks/1.png',
+  '2': '/assets/waymarks/2.png',
+  '3': '/assets/waymarks/3.png',
+  '4': '/assets/waymarks/4.png',
+  A: '/assets/waymarks/A.png',
+  B: '/assets/waymarks/B.png',
+  C: '/assets/waymarks/C.png',
+  D: '/assets/waymarks/D.png',
 }
 
 const NUMBERED: ReadonlySet<WaymarkId> = new Set(['1', '2', '3', '4'])

@@ -20,7 +20,7 @@ export function App() {
             rel="noreferrer"
           >
             <img
-              src="/icons/github.png"
+              src="/assets/icons/github.png"
               alt="GitHub"
               style={{ height: '60px', width: '60px' }}
             />

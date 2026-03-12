@@ -116,7 +116,7 @@ draw_tower_aoe(draw, CX, CY - aoe_offset, aoe_r)
 draw_tower_aoe(draw, CX, CY + aoe_offset, aoe_r)
 
 # ── Save ──────────────────────────────────────────────────────────────────────
-out = os.path.normpath(os.path.join(os.path.dirname(__file__), "../public/hazards/knockback_tower.png"))
+out = os.path.normpath(os.path.join(os.path.dirname(__file__), "../public/assets/hazards/knockback_tower.png"))
 os.makedirs(os.path.dirname(out), exist_ok=True)
 img.save(out)
 print(f"Saved: {out}  ({SIZE}x{SIZE}px)")

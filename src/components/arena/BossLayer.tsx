@@ -12,7 +12,7 @@ export function BossLayer({ bosses }: { bosses: Boss[] }) {
 
   useEffect(() => {
     let cancelled = false
-    Assets.load('/boss.png').then((t: Texture) => {
+    Assets.load('/assets/boss.png').then((t: Texture) => {
       if (!cancelled) setTexture(t)
     }).catch(() => {})
     return () => { cancelled = true }

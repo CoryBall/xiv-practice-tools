@@ -86,8 +86,8 @@ g.circle(cx, cy, r); g.stroke()
 
 1. **FloorLayer** — arena background image or fallback platforms
 2. **HazardLayer** — circles, cones, rects, donuts, lines, tethers, image overlays
-3. **NpcLayer** — other players' role icons (`/icons/50/*.png`, 50×50px)
-4. **BossLayer** — boss sprite (`/boss.png`, 100×100px)
-5. **WaymarkLayer** — `/waymarks/{1–4,A–D}.png`
+3. **NpcLayer** — other players' role icons (`/assets/icons/50/*.png`, 50×50px)
+4. **BossLayer** — boss sprite (`/assets/boss.png`, 100×100px)
+5. **WaymarkLayer** — `/assets/waymarks/{1–4,A–D}.png`
 6. **FeedbackLayer** — user click marker (green/red) + solution ring
 7. **ClickTarget** — invisible pointer event receiver

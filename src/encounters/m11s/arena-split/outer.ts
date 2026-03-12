@@ -59,7 +59,7 @@ const OuterStrategy: Strategy<SplitArenaState, ArenaSplitVariant> = {
     {
         id: 'move-to-side',
         prompt: 'Get ready to be knocked onto your platform',
-        arenaImage: '/arenas/m11s/default.png',
+        arenaImage: '/assets/arenas/m11s/default.png',
         hazards: () => [
             {
                 id: 'knockback-indicator',
@@ -119,7 +119,7 @@ const OuterStrategy: Strategy<SplitArenaState, ArenaSplitVariant> = {
     {
         id: 'tower-1',
         prompt: 'Stand on your tower to get knocked back onto the correct platform',
-        arenaImage: '/arenas/m11s/split-arena.png',
+        arenaImage: '/assets/arenas/m11s/split-arena.png',
         rollVariant: () => VARIANTS[Math.floor(Math.random() * VARIANTS.length)]!,
         hazards: (variant, _s) => {
             const LineAoeHazards: Hazard[] = [
@@ -147,7 +147,7 @@ const OuterStrategy: Strategy<SplitArenaState, ArenaSplitVariant> = {
                     opacity: 1,
                     shape: {
                         type: 'image',
-                        url: '/hazards/knockback_aoe.png',
+                        url: '/assets/hazards/knockback_aoe.png',
                         pos: { x: 0.2, y: 0.22 },
                         width: 0.4,
                         height: 0.4,
@@ -168,7 +168,7 @@ const OuterStrategy: Strategy<SplitArenaState, ArenaSplitVariant> = {
                     opacity: 1,
                     shape: {
                         type: 'image',
-                        url: '/hazards/knockback_aoe.png',
+                        url: '/assets/hazards/knockback_aoe.png',
                         pos: { x: 0.2, y: 0.22 },
                         width: 0.4,
                         height: 0.4,
