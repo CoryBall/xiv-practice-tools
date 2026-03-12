@@ -1,7 +1,7 @@
 import { Assets } from 'pixi.js'
 import type { Graphics as PixiGraphics, Texture } from 'pixi.js'
 import { useCallback, useEffect, useState } from 'react'
-import { SCALE, s } from './scale'
+import { SCALE, px, s } from './scale'
 
 const LEFT_PLATFORM = { x1: 0.04, x2: 0.46, y1: 0.04, y2: 0.96 }
 const RIGHT_PLATFORM = { x1: 0.54, x2: 0.96, y1: 0.04, y2: 0.96 }
@@ -27,7 +27,7 @@ export function FloorLayer({ arenaImage }: { arenaImage?: string }) {
     g.rect(0, 0, SCALE, SCALE)
     g.fill()
     g.setFillStyle({ color: 0x2a2a4e })
-    g.setStrokeStyle({ color: 0x4444aa, width: 2, alpha: 0.8 })
+    g.setStrokeStyle({ color: 0x4444aa, width: px(2), alpha: 0.8 })
     g.rect(
       s(LEFT_PLATFORM.x1),
       s(LEFT_PLATFORM.y1),

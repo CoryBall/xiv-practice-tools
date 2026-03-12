@@ -2,9 +2,9 @@ import { Assets } from 'pixi.js'
 import type { Texture } from 'pixi.js'
 import { useEffect, useState } from 'react'
 import type { Boss } from '../../engine/types'
-import { s } from './scale'
+import { px, s } from './scale'
 
-const BOSS_SIZE = 100
+const BOSS_SIZE = px(100)
 export const DEFAULT_BOSSES: Boss[] = [{ pos: { x: 0.5, y: 0.5 } }]
 
 export function BossLayer({ bosses }: { bosses: Boss[] }) {

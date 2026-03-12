@@ -2,11 +2,11 @@ import { Assets } from 'pixi.js'
 import type { Graphics as PixiGraphics, Texture } from 'pixi.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { Waymark, WaymarkId } from '../../engine/types'
-import { s } from './scale'
+import { px, s } from './scale'
 
-const WAYMARK_ICON_SIZE = 32 // render size in px (images are 80×80 native)
-const WAYMARK_BG_RADIUS = 21 // circle radius for lettered waymarks
-const WAYMARK_BG_HALF_SQUARE = 20 // half-side for numbered (square) waymarks
+const WAYMARK_ICON_SIZE = px(32)
+const WAYMARK_BG_RADIUS = px(21)
+const WAYMARK_BG_HALF_SQUARE = px(20)
 
 const WAYMARK_COLORS: Record<WaymarkId, number> = {
   '1': 0xfc4043,
@@ -43,7 +43,7 @@ function WaymarkMarker({ waymark, texture }: { waymark: Waymark; texture: Textur
     (g: PixiGraphics) => {
       g.clear()
       g.setFillStyle({ color, alpha: 0.55 })
-      g.setStrokeStyle({ color: 0x000000, width: 1.5, alpha: 0.6 })
+      g.setStrokeStyle({ color: 0x000000, width: px(1.5), alpha: 0.6 })
       if (!numbered) {
         g.circle(cx, cy, WAYMARK_BG_RADIUS)
       } else {

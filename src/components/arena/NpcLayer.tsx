@@ -3,9 +3,9 @@ import type { Texture } from 'pixi.js'
 import { useEffect, useState } from 'react'
 import { ROLE_ICONS } from '../../config/roleIcons'
 import type { Role, Vec2 } from '../../engine/types'
-import { s } from './scale'
+import { px, s } from './scale'
 
-const ICON_SIZE = 50 // matches source image size
+const ICON_SIZE = px(50)
 
 function NpcDot({ role, pos }: { role: Role; pos: Vec2 }) {
   const [texture, setTexture] = useState<Texture | null>(null)

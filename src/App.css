@@ -182,13 +182,13 @@ body {
   align-items: center;
   gap: 1.5rem;
   width: 100%;
-  max-width: 600px;
+  max-width: 1200px;
 }
 
 .arena-wrapper {
   position: relative;
   width: 100%;
-  max-width: 600px;
+  max-width: 1200px;
   border: 2px solid #333366;
   border-radius: 8px;
   overflow: hidden;
@@ -217,7 +217,7 @@ body {
 /* HUD */
 .hud {
   width: 100%;
-  max-width: 600px;
+  max-width: 1200px;
   background: #111128;
   border: 1px solid #333366;
   border-radius: 8px;

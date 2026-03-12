@@ -2,23 +2,23 @@ import { Assets } from 'pixi.js'
 import type { Graphics as PixiGraphics, Texture } from 'pixi.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { Hazard, HazardShape } from '../../engine/types'
-import { s } from './scale'
+import { px, s } from './scale'
 
 type ImageHazardShape = Extract<HazardShape, { type: 'image' }>
 
 function drawHazardShape(g: PixiGraphics, shape: HazardShape, color: number, alpha: number, outlined = false) {
-  const outlineStyle = outlined ? { color: 0x000000, alpha: 0.8, width: 2 } : null
+  const outlineStyle = outlined ? { color: 0x000000, alpha: 0.8, width: px(2) } : null
   switch (shape.type) {
     case 'circle': {
       g.setFillStyle({ color, alpha })
-      g.setStrokeStyle(outlineStyle ?? { color, alpha: Math.min(alpha + 0.2, 1), width: 1 })
+      g.setStrokeStyle(outlineStyle ?? { color, alpha: Math.min(alpha + 0.2, 1), width: px(1) })
       g.circle(s(shape.pos.x), s(shape.pos.y), s(shape.radius))
       g.fill()
       g.stroke()
       break
     }
     case 'line': {
-      g.setStrokeStyle({ color, alpha, width: 3 })
+      g.setStrokeStyle({ color, alpha, width: px(3) })
       g.moveTo(s(shape.x), 0)
       g.lineTo(s(shape.x), s(1))
       g.stroke()
@@ -75,7 +75,7 @@ function drawHazardShape(g: PixiGraphics, shape: HazardShape, color: number, alp
       break
     }
     case 'tether': {
-      g.setStrokeStyle({ color, alpha, width: 3 })
+      g.setStrokeStyle({ color, alpha, width: px(3) })
       g.moveTo(s(shape.a.x), s(shape.a.y))
       g.lineTo(s(shape.b.x), s(shape.b.y))
       g.stroke()

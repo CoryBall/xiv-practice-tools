@@ -1,7 +1,7 @@
 import type { FederatedPointerEvent, Graphics as PixiGraphics } from 'pixi.js'
 import { useCallback } from 'react'
 import type { Vec2 } from '../../engine/types'
-import { SCALE, s } from './scale'
+import { SCALE, px, s } from './scale'
 
 export function FeedbackLayer({
   userClick,
@@ -18,8 +18,8 @@ export function FeedbackLayer({
       if (!userClick) return
       const color = wasCorrect ? 0x44ff44 : 0xff4444
       g.setFillStyle({ color, alpha: 0.9 })
-      g.setStrokeStyle({ color: 0xffffff, width: 2 })
-      g.circle(s(userClick.x), s(userClick.y), 10)
+      g.setStrokeStyle({ color: 0xffffff, width: px(2) })
+      g.circle(s(userClick.x), s(userClick.y), px(10))
       g.fill()
       g.stroke()
     },
@@ -30,8 +30,8 @@ export function FeedbackLayer({
     (g: PixiGraphics) => {
       g.clear()
       if (!solution || wasCorrect !== false) return
-      g.setStrokeStyle({ color: 0x44ff44, width: 3, alpha: 0.9 })
-      g.circle(s(solution.x), s(solution.y), 14)
+      g.setStrokeStyle({ color: 0x44ff44, width: px(3), alpha: 0.9 })
+      g.circle(s(solution.x), s(solution.y), px(14))
       g.stroke()
     },
     [solution, wasCorrect],
