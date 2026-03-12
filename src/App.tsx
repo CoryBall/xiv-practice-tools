@@ -8,11 +8,16 @@ import { useSimulator } from './store/simulator'
 export function App() {
   useUrlSync()
   const status = useSimulator((s) => s.status)
+  const reset = useSimulator((s) => s.reset)
 
   return (
     <div className="app">
       <header className="app-header">
-        <h1>XIV Practice Tools</h1>
+        <h1>
+          <button onClick={reset} style={{ all: 'unset', cursor: 'pointer' }}>
+            XIV Practice Tools
+          </button>
+        </h1>
         <div className="app-header-actions">
           <a
             href="https://github.com/CoryBall/xiv-practice-tools"

@@ -12,6 +12,7 @@ export type HazardShape =
   | { type: 'line'; x: number } // vertical divider (arena split)
   | { type: 'tether'; a: Vec2; b: Vec2 }
   | { type: 'image'; url: string; pos: Vec2; width?: number; height?: number; rotation?: number }
+  | { type: 'boss'; pos: Vec2; rotation?: number; scale?: number }
 
 /** A tether endpoint — either a role (resolved to that role's position) or a fixed arena point. */
 export type TetherEndpoint = Role | Vec2
@@ -104,6 +105,12 @@ export interface Strategy<TState = any, TVariant extends Variant = any> {
   waymarks?: Waymark[]
   /** Overrides boss positions for all phases of this strategy. */
   bosses?: Boss[]
+  /**
+   * Initial state passed to all phase callbacks. Use `rollState` instead when
+   * the starting state needs to be randomized. If both are provided, `rollState` wins.
+   * If neither is provided, state is null.
+   */
+  initialState?: TState
   /**
    * Called once when the mechanic starts. The returned value is the initial
    * state object passed to all phase callbacks. If omitted, state is null.

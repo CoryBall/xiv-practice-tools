@@ -146,7 +146,7 @@ export const useSimulator = create<SimulatorStore>((set, get) => ({
     const phase0 = strategy.phases[0]
     if (!phase0) return
 
-    const state = strategy.rollState ? strategy.rollState() : null
+    const state = strategy.rollState ? strategy.rollState() : (strategy.initialState ?? null)
     const variant = phase0.rollVariant ? phase0.rollVariant([]) : null
     const npcPositions = computeNpcPositions(
       variant,

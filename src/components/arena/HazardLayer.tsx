@@ -5,6 +5,7 @@ import type { Hazard, HazardShape } from '../../engine/types'
 import { px, s } from './scale'
 
 type ImageHazardShape = Extract<HazardShape, { type: 'image' }>
+type BossHazardShape = Extract<HazardShape, { type: 'boss' }>
 
 function drawHazardShape(g: PixiGraphics, shape: HazardShape, color: number, alpha: number, outlined = false) {
   const outlineStyle = outlined ? { color: 0x000000, alpha: 0.8, width: px(2) } : null
@@ -114,9 +115,41 @@ function HazardSprite({ shape, opacity }: { shape: ImageHazardShape; opacity: nu
   )
 }
 
+const BOSS_SIZE = px(100)
+
+function BossHazardSprite({ shape, opacity }: { shape: BossHazardShape; opacity: number }) {
+  const [texture, setTexture] = useState<Texture | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    Assets.load('/assets/boss.png').then((t: Texture) => {
+      if (!cancelled) setTexture(t)
+    }).catch(() => {})
+    return () => { cancelled = true; setTexture(null) }
+  }, [])
+
+  if (!texture) return null
+
+  const size = BOSS_SIZE * (shape.scale ?? 1)
+
+  return (
+    <pixiSprite
+      texture={texture}
+      width={size}
+      height={size}
+      anchor={{ x: 0.5, y: 0.5 }}
+      x={s(shape.pos.x)}
+      y={s(shape.pos.y)}
+      rotation={shape.rotation ? (shape.rotation * Math.PI) / 180 : 0}
+      alpha={opacity}
+    />
+  )
+}
+
 export function HazardLayer({ hazards }: { hazards: Hazard[] }) {
-  const shapeHazards = useMemo(() => hazards.filter((h) => h.shape.type !== 'image'), [hazards])
+  const shapeHazards = useMemo(() => hazards.filter((h) => h.shape.type !== 'image' && h.shape.type !== 'boss'), [hazards])
   const imageHazards = useMemo(() => hazards.filter((h) => h.shape.type === 'image'), [hazards])
+  const bossHazards = useMemo(() => hazards.filter((h) => h.shape.type === 'boss'), [hazards])
 
   const draw = useCallback(
     (g: PixiGraphics) => {
@@ -141,6 +174,13 @@ export function HazardLayer({ hazards }: { hazards: Hazard[] }) {
         <HazardSprite
           key={h.id}
           shape={h.shape as ImageHazardShape}
+          opacity={h.opacity ?? 1}
+        />
+      ))}
+      {bossHazards.map((h) => (
+        <BossHazardSprite
+          key={h.id}
+          shape={h.shape as BossHazardShape}
           opacity={h.opacity ?? 1}
         />
       ))}

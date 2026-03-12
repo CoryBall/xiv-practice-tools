@@ -5,7 +5,7 @@ import { ROLE_ICONS } from '../../config/roleIcons'
 import type { Role, Vec2 } from '../../engine/types'
 import { px, s } from './scale'
 
-const ICON_SIZE = px(50)
+const ICON_SIZE = px(36)
 
 function NpcDot({ role, pos }: { role: Role; pos: Vec2 }) {
   const [texture, setTexture] = useState<Texture | null>(null)
