@@ -1,7 +1,7 @@
 import { Application, extend } from '@pixi/react'
 import { Container, Graphics, Sprite, Text } from 'pixi.js'
 import type { FederatedPointerEvent } from 'pixi.js'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useSimulator } from '../store/simulator'
 import { encounters } from '../encounters'
 import type { Hazard, TetherEndpoint, Vec2, Role } from '../engine/types'
@@ -104,6 +104,22 @@ export function Arena() {
     [status, handleClick],
   )
 
+  // Responsive scaling — keep Pixi at SCALE×SCALE, CSS-scale to fit
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const [arenaSize, setArenaSize] = useState(SCALE)
+
+  useEffect(() => {
+    const el = wrapperRef.current
+    if (!el) return
+    const ro = new ResizeObserver(([entry]) => {
+      setArenaSize(Math.min(Math.round(entry.contentRect.width), SCALE))
+    })
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
+
+  const cssScale = arenaSize / SCALE
+
   // Coordinate inspector (dev only)
   const [cursor, setCursor] = useState<Vec2 | null>(null)
   const [copied, setCopied] = useState(false)
@@ -112,10 +128,10 @@ export function Arena() {
     if (!import.meta.env.DEV || status === 'idle') { setCursor(null); return }
     const rect = e.currentTarget.getBoundingClientRect()
     setCursor({
-      x: Math.max(0, Math.min(1, (e.clientX - rect.left) / SCALE)),
-      y: Math.max(0, Math.min(1, (e.clientY - rect.top) / SCALE)),
+      x: Math.max(0, Math.min(1, (e.clientX - rect.left) / arenaSize)),
+      y: Math.max(0, Math.min(1, (e.clientY - rect.top) / arenaSize)),
     })
-  }, [])
+  }, [arenaSize, status])
 
   const onMouseLeave = useCallback(() => setCursor(null), [])
 
@@ -125,42 +141,46 @@ export function Arena() {
       if (status !== 'idle') return  // game clicks handled by Pixi
       const rect = e.currentTarget.getBoundingClientRect()
       const pos = {
-        x: +((e.clientX - rect.left) / SCALE).toFixed(3),
-        y: +((e.clientY - rect.top) / SCALE).toFixed(3),
+        x: +((e.clientX - rect.left) / arenaSize).toFixed(3),
+        y: +((e.clientY - rect.top) / arenaSize).toFixed(3),
       }
       void navigator.clipboard.writeText(`{ x: ${pos.x}, y: ${pos.y} }`).then(() => {
         setCopied(true)
         setTimeout(() => setCopied(false), 1200)
       })
     },
-    [status],
+    [status, arenaSize],
   )
 
   return (
     <div
+      ref={wrapperRef}
       className="arena-wrapper"
+      style={{ height: arenaSize }}
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
       onClick={onWrapperClick}
     >
-      <Application
-        width={SCALE}
-        height={SCALE}
-        background={0x0d0d1a}
-        antialias
-      >
-        <FloorLayer arenaImage={arenaImage} />
-        <WaymarkLayer waymarks={waymarks} />
-        <BossLayer bosses={bosses} />
-        {status !== 'idle' && (
-          <>
-            <HazardLayer hazards={allHazards} />
-            <NpcLayer npcPositions={npcPositions} />
-            <FeedbackLayer userClick={userClick} solution={solution} wasCorrect={wasCorrect} />
-          </>
-        )}
-        <ClickTarget onPointerDown={onPointerDown} />
-      </Application>
+      <div style={{ transform: `scale(${cssScale})`, transformOrigin: 'top left', width: SCALE, height: SCALE }}>
+        <Application
+          width={SCALE}
+          height={SCALE}
+          background={0x0d0d1a}
+          antialias
+        >
+          <FloorLayer arenaImage={arenaImage} />
+          <WaymarkLayer waymarks={waymarks} />
+          <BossLayer bosses={bosses} />
+          {status !== 'idle' && (
+            <>
+              <HazardLayer hazards={allHazards} />
+              <NpcLayer npcPositions={npcPositions} />
+              <FeedbackLayer userClick={userClick} solution={solution} wasCorrect={wasCorrect} />
+            </>
+          )}
+          <ClickTarget onPointerDown={onPointerDown} />
+        </Application>
+      </div>
 
       {cursor && (
         <div className="arena-coords">

@@ -18,12 +18,14 @@ body {
 }
 
 .app-header {
-  padding: 1rem 2rem;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid #333366;
   background: #111128;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 .app-header h1 {
@@ -44,6 +46,13 @@ body {
   align-items: center;
   gap: 2rem;
   padding: 2rem;
+}
+
+@media (max-width: 640px) {
+  .app-main {
+    padding: 1rem 0.75rem;
+    gap: 1rem;
+  }
 }
 
 /* Selector */
@@ -173,10 +182,13 @@ body {
   align-items: center;
   gap: 1.5rem;
   width: 100%;
+  max-width: 600px;
 }
 
 .arena-wrapper {
   position: relative;
+  width: 100%;
+  max-width: 600px;
   border: 2px solid #333366;
   border-radius: 8px;
   overflow: hidden;
@@ -204,7 +216,8 @@ body {
 
 /* HUD */
 .hud {
-  width: 600px;
+  width: 100%;
+  max-width: 600px;
   background: #111128;
   border: 1px solid #333366;
   border-radius: 8px;
