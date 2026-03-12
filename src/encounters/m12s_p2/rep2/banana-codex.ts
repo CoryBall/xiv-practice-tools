@@ -7,6 +7,7 @@ interface Replication2State {
 const BananaCodex: Strategy<Replication2State> = {
   id: 'bc-rep-2',
   name: 'Banana Codex',
+  url: 'https://raidplan.io/plan/zLbFvB6R3muGFSK1',
   waymarks: [
     { id: '4', pos: { x: 0.5, y: 0.325 } },
     { id: 'D', pos: { x: 0.5, y: 0.215 } },

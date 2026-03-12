@@ -98,6 +98,8 @@ export interface Strategy<TState = any, TVariant extends Variant = any> {
   id: string
   name: string
   description?: string
+  /** Link to an external guide or explanation for this strategy. */
+  url?: string
   /** Waymarks placed on the arena for this strategy. Rendered below hazards. */
   waymarks?: Waymark[]
   /** Overrides boss positions for all phases of this strategy. */

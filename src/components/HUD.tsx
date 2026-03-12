@@ -55,6 +55,11 @@ export function HUD() {
             {showHints ? 'Hide Hints' : 'Show Hints'}
           </button>
         )}
+        {strategy?.url && (
+          <a className="strategy-link" href={strategy.url} target="_blank" rel="noreferrer">
+            Strategy guide
+          </a>
+        )}
         {status === 'showing-result' && !isLastPhase && (
           <button className="hud-btn" onClick={nextPhase}>
             Next Phase

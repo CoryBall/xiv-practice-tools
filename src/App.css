@@ -21,12 +21,21 @@ body {
   padding: 1rem 2rem;
   border-bottom: 1px solid #333366;
   background: #111128;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .app-header h1 {
   font-size: 1.5rem;
   color: #aab8ff;
   letter-spacing: 0.05em;
+}
+
+.app-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .app-main {
@@ -112,6 +121,27 @@ body {
   background: #3333aa;
   border-color: #7777dd;
   color: #ffffff;
+}
+
+.strategy-link {
+  display: inline-block;
+  text-align: center;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  border: 1px solid #444477;
+  color: #aab8ff;
+  font-size: 0.85rem;
+  text-decoration: none;
+  background: #1a1a2e;
+}
+
+.selector .strategy-link {
+  display: block;
+}
+
+.strategy-link:hover {
+  border-color: #6677cc;
+  color: #ccd4ff;
 }
 
 .start-btn {

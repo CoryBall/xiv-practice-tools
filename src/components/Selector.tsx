@@ -20,6 +20,7 @@ export function Selector() {
 
   const selectedEncounter = encounters.find((e) => e.id === selectedEncounterId)
   const selectedMechanic = selectedEncounter?.mechanics.find((m) => m.id === selectedMechanicId)
+  const selectedStrategy = selectedMechanic?.strategies.find((s) => s.id === selectedStrategyId)
 
   const canStart =
     selectedEncounterId !== null &&
@@ -103,6 +104,12 @@ export function Selector() {
           ))}
         </div>
       </div>
+
+      {selectedStrategy?.url && (
+        <a className="strategy-link" href={selectedStrategy.url} target="_blank" rel="noreferrer">
+          Read the {selectedStrategy.name} guide
+        </a>
+      )}
 
       <button className="start-btn" disabled={!canStart} onClick={start}>
         Start
