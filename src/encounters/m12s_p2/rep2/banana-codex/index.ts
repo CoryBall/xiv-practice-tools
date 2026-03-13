@@ -1,4 +1,4 @@
-import type { Role, Strategy } from "../../../../engine/types";
+import type { Role, Strategy, Vec2 } from "../../../../engine/types";
 import { distance } from "../../../../utils/geometry";
 import {
   ALL_ROLES,
@@ -11,8 +11,11 @@ import {
   CLONE_RADIUS,
   PHASE3_POSITIONS,
   PHASE3_RADIUS,
+  PHASE4_CONE_RADIUS,
+  PHASE4_POSITIONS,
+  PHASE4_RADIUS,
 } from "./constants";
-import { buildInitialPlayerPositions, computeGroups, computePhase2, computePhase3, shuffle } from "./logic";
+import { buildInitialPlayerPositions, computeGroups, computePhase2, computePhase3, getPhase4Target, shuffle } from "./logic";
 import type { Replication2State } from "./types";
 
 const BananaCodex: Strategy<Replication2State> = {
@@ -158,6 +161,38 @@ const BananaCodex: Strategy<Replication2State> = {
       }),
       tolerance: 0,
       autoAdvance: true,
+    },
+    {
+      id: 'phase-4',
+      prompt: 'Move to your group\'s safe spot',
+      bosses: [{ pos: { x: 0.5, y: 0.265 }, scale: 1.5 }],
+      setPlayerPositions: (_, state) => state!.playerPositions,
+      hazards: () => [],
+      getSolution: (_, role, state) =>
+        state ? getPhase4Target(role, state.cloneAssignments, state.group1Players) : BOSS_CENTER,
+      getHints: () => [
+        { id: 'hint-p4-g1',      shape: { type: 'circle' as const, pos: PHASE4_POSITIONS.group1,      radius: PHASE4_RADIUS } },
+        { id: 'hint-p4-g2',      shape: { type: 'circle' as const, pos: PHASE4_POSITIONS.group2,      radius: PHASE4_RADIUS } },
+        { id: 'hint-p4-cone-g1', shape: { type: 'circle' as const, pos: PHASE4_POSITIONS.cone_group1, radius: PHASE4_CONE_RADIUS } },
+        { id: 'hint-p4-cone-g2', shape: { type: 'circle' as const, pos: PHASE4_POSITIONS.cone_group2, radius: PHASE4_CONE_RADIUS } },
+      ],
+      isCorrect: (click, _, role, state) => {
+        if (!state) return false
+        const target = getPhase4Target(role, state.cloneAssignments, state.group1Players)
+        const isCone = target === PHASE4_POSITIONS.cone_group1 || target === PHASE4_POSITIONS.cone_group2
+        return distance(click, target) <= (isCone ? PHASE4_CONE_RADIUS : PHASE4_RADIUS)
+      },
+      updateState: (state, _variant, role, click, wasCorrect) => ({
+        ...state!,
+        playerPositions: ALL_ROLES.map((r) => {
+          const target = getPhase4Target(r, state!.cloneAssignments, state!.group1Players)
+          return {
+            role: r,
+            pos: r === role ? (wasCorrect ? target : (click ?? target)) : target,
+          }
+        }),
+      }),
+      tolerance: 0,
     },
   ],
 }
