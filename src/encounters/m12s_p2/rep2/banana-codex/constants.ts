@@ -5,12 +5,12 @@ export const ALL_ROLES = ['MT', 'OT', 'H1', 'H2', 'M1', 'M2', 'R1', 'R2'] as con
 
 export const CLONE_RADIUS = 0.07
 export const PHASE3_RADIUS = 0.015
-export const PHASE4_RADIUS = 0.04
+export const PHASE4_RADIUS = 0.05
 export const PHASE4_CONE_RADIUS = 0.015
 
 export const PHASE4_POSITIONS = {
-  group1:      { x: 0.39,  y: 0.365 },
-  group2:      { x: 0.615, y: 0.365 },
+  group1:      { x: 0.4,  y: 0.36 },
+  group2:      { x: 0.6, y: 0.36 },
   cone_group1: { x: 0.425, y: 0.325 },
   cone_group2: { x: 0.575, y: 0.325 },
 } as const
