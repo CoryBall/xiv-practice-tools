@@ -4,7 +4,20 @@ import type { BossCloneMechanic } from "./types";
 export const ALL_ROLES = ['MT', 'OT', 'H1', 'H2', 'M1', 'M2', 'R1', 'R2'] as const
 
 export const CLONE_RADIUS = 0.07
+export const PHASE3_RADIUS = 0.015
 export const BOSS_CENTER: Vec2 = { x: 0.5, y: 0.5 }
+
+// Phase 3 destination positions by role/mechanic
+export const PHASE3_POSITIONS = {
+  S:           { x: 0.5,   y: 0.9   },
+  N:           { x: 0.5,   y: 0.265 },
+  prox_g1:     { x: 0.125, y: 0.575 },
+  prox_g2:     { x: 0.875, y: 0.575 },
+  stack_g1:    { x: 0.46, y: 0.1   },
+  stack_g2:    { x: 0.54, y: 0.1   },
+  cone_g1:     { x: 0.375, y: 0.12  },
+  cone_g2:     { x: 0.625, y: 0.12  },
+} as const
 
 // Player clone positions (outer ring), indexed 0–7
 export const CLONE_POSITIONS: Vec2[] = [

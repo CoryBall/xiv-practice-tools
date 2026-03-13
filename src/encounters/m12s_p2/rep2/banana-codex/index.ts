@@ -9,8 +9,10 @@ import {
   CLONE_HAZARDS,
   CLONE_POSITIONS,
   CLONE_RADIUS,
+  PHASE3_POSITIONS,
+  PHASE3_RADIUS,
 } from "./constants";
-import { buildInitialPlayerPositions, computeGroups, computePhase2, shuffle } from "./logic";
+import { buildInitialPlayerPositions, computeGroups, computePhase2, computePhase3, shuffle } from "./logic";
 import type { Replication2State } from "./types";
 
 const BananaCodex: Strategy<Replication2State> = {
@@ -33,6 +35,7 @@ const BananaCodex: Strategy<Replication2State> = {
       cloneAssignments,
       phase2Assignments,
       phase2HintPositions,
+      phase3Assignments: {} as Record<Role, Vec2>,
       playerPositions: buildInitialPlayerPositions(),
     }
   },
@@ -127,16 +130,34 @@ const BananaCodex: Strategy<Replication2State> = {
             : state!.phase2Assignments[r],
         }))
         const { group1Players, group2Players } = computeGroups(state!.playerPositions)
-        return { ...state!, group1Players, group2Players, playerPositions }
+        const phase3Assignments = computePhase3(state!.cloneAssignments, group1Players)
+        return { ...state!, group1Players, group2Players, playerPositions, phase3Assignments }
       },
       autoAdvance: true,
     },
     {
       id: 'phase-3',
-      prompt: 'TODO: phase 3',
+      prompt: 'Move to your assigned position',
       setPlayerPositions: (_, state) => state!.playerPositions,
       hazards: () => [],
-      getSolution: () => BOSS_CENTER,
+      getSolution: (_, role, state) => state?.phase3Assignments[role] ?? BOSS_CENTER,
+      getHints: () => Object.values(PHASE3_POSITIONS).map((pos, i) => ({
+        id: `hint-p3-${i}`,
+        shape: { type: 'circle' as const, pos, radius: PHASE3_RADIUS },
+      })),
+      isCorrect: (click, _, role, state) =>
+        !!state && distance(click, state.phase3Assignments[role]) <= PHASE3_RADIUS,
+      updateState: (state, _variant, role, click, wasCorrect) => ({
+        ...state!,
+        playerPositions: ALL_ROLES.map((r) => ({
+          role: r,
+          pos: r === role
+            ? (wasCorrect ? state!.phase3Assignments[r] : (click ?? state!.phase3Assignments[r]))
+            : state!.phase3Assignments[r],
+        })),
+      }),
+      tolerance: 0,
+      autoAdvance: true,
     },
   ],
 }

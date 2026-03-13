@@ -13,4 +13,6 @@ export interface Replication2State {
   phase2Assignments: Record<Role, Vec2>;
   /** All valid hint positions for each role in phase 2 */
   phase2HintPositions: Partial<Record<Role, Vec2[]>>;
+  /** Correct destination for each role in phase 3 */
+  phase3Assignments: Record<Role, Vec2>;
 }

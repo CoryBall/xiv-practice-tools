@@ -8,6 +8,7 @@ import {
   CLONE_RULES,
   CW_ORDER,
   CCW_ORDER,
+  PHASE3_POSITIONS,
 } from "./constants";
 
 export function shuffle<T>(arr: T[]): T[] {
@@ -77,6 +78,30 @@ export function computeGroups(playerPositions: Replication2State['playerPosition
   }
 
   return { group1Players, group2Players }
+}
+
+export function computePhase3(
+  cloneAssignments: Record<Role, Vec2>,
+  group1Players: Role[],
+): Record<Role, Vec2> {
+  const assignments: Partial<Record<Role, Vec2>> = {}
+
+  for (const role of ALL_ROLES) {
+    const slotIdx = CLONE_POSITIONS.findIndex(p => p.x === cloneAssignments[role].x && p.y === cloneAssignments[role].y)
+    const rule = CLONE_RULES[slotIdx]
+    const isGroup1 = group1Players.includes(role)
+
+    if (!rule || rule.kind === 'stay') {
+      assignments[role] = PHASE3_POSITIONS.S
+    } else if (rule.kind === 'center') {
+      assignments[role] = PHASE3_POSITIONS.N
+    } else {
+      const key = `${rule.mechType}_${isGroup1 ? 'g1' : 'g2'}` as keyof typeof PHASE3_POSITIONS
+      assignments[role] = PHASE3_POSITIONS[key]
+    }
+  }
+
+  return assignments as Record<Role, Vec2>
 }
 
 export function buildInitialPlayerPositions(): Replication2State['playerPositions'] {
