@@ -232,6 +232,13 @@ body {
   color: #8888bb;
 }
 
+.hud-prompt-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
 .hud-prompt {
   font-size: 1.2rem;
   font-weight: bold;

@@ -168,6 +168,7 @@ export const useSimulator = create<SimulatorStore>((set, get) => ({
       solution: null,
       wasCorrect: null,
       npcPositions,
+      showHints: strategy.hintsDefault ?? false,
     })
   },
 
@@ -276,6 +277,7 @@ export const useSimulator = create<SimulatorStore>((set, get) => ({
       solution: null,
       wasCorrect: null,
       npcPositions: {},
+      showHints: false,
     }),
 
   showHints: false,

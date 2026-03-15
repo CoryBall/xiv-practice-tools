@@ -7,6 +7,7 @@ export const CLONE_RADIUS = 0.07
 export const PHASE3_RADIUS = 0.015
 export const PHASE4_RADIUS = 0.05
 export const PHASE4_CONE_RADIUS = 0.015
+export const PHASE5_RADIUS = 0.04
 
 export const PHASE4_POSITIONS = {
   group1:      { x: 0.4,  y: 0.36 },
@@ -14,6 +15,14 @@ export const PHASE4_POSITIONS = {
   cone_group1: { x: 0.425, y: 0.325 },
   cone_group2: { x: 0.575, y: 0.325 },
 } as const
+export const PHASE5_POSITIONS = {
+  cone_g1:    { x: 0.38, y: 0.265 },  // just W of boss, 0.06 from edge
+  cone_g2:    { x: 0.62, y: 0.265 },  // just E of boss, 0.06 from edge
+  stack_g1:   { x: 0.46, y: 0.305 },  // just inside SW edge
+  stack_g2:   { x: 0.54, y: 0.305 },  // just inside SE edge
+  stack_rest: { x: 0.5,  y: 0.21  },  // N edge
+} as const
+
 export const BOSS_CENTER: Vec2 = { x: 0.5, y: 0.5 }
 
 // Phase 3 destination positions by role/mechanic

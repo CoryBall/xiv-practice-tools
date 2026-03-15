@@ -10,6 +10,7 @@ import {
   CCW_ORDER,
   PHASE3_POSITIONS,
   PHASE4_POSITIONS,
+  PHASE5_POSITIONS,
 } from "./constants";
 
 export function shuffle<T>(arr: T[]): T[] {
@@ -119,6 +120,22 @@ export function getPhase4Target(
     return isGroup1 ? PHASE4_POSITIONS.cone_group1 : PHASE4_POSITIONS.cone_group2
   }
   return isGroup1 ? PHASE4_POSITIONS.group1 : PHASE4_POSITIONS.group2
+}
+
+export function getPhase5Target(
+  role: Role,
+  cloneAssignments: Record<Role, Vec2>,
+  group1Players: Role[],
+): Vec2 {
+  const slotIdx = CLONE_POSITIONS.findIndex(p => p.x === cloneAssignments[role].x && p.y === cloneAssignments[role].y)
+  const rule = CLONE_RULES[slotIdx]
+  const isGroup1 = group1Players.includes(role)
+
+  if (rule?.kind === 'mechanic') {
+    if (rule.mechType === 'cone')  return isGroup1 ? PHASE5_POSITIONS.cone_g1  : PHASE5_POSITIONS.cone_g2
+    if (rule.mechType === 'stack') return isGroup1 ? PHASE5_POSITIONS.stack_g1 : PHASE5_POSITIONS.stack_g2
+  }
+  return PHASE5_POSITIONS.stack_rest
 }
 
 export function buildInitialPlayerPositions(): Replication2State['playerPositions'] {

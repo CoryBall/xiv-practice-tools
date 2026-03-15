@@ -14,8 +14,10 @@ import {
   PHASE4_CONE_RADIUS,
   PHASE4_POSITIONS,
   PHASE4_RADIUS,
+  PHASE5_POSITIONS,
+  PHASE5_RADIUS,
 } from "./constants";
-import { buildInitialPlayerPositions, computeGroups, computePhase2, computePhase3, getPhase4Target, shuffle } from "./logic";
+import { buildInitialPlayerPositions, computeGroups, computePhase2, computePhase3, getPhase4Target, getPhase5Target, shuffle } from "./logic";
 import type { Replication2State } from "./types";
 
 const BananaCodex: Strategy<Replication2State> = {
@@ -23,6 +25,7 @@ const BananaCodex: Strategy<Replication2State> = {
   name: 'Banana Codex',
   url: 'https://raidplan.io/plan/zLbFvB6R3muGFSK1',
   description: 'Marked players stand on outside corner of waymarks',
+  hintsDefault: true,
   rollState: () => {
     const shuffledPositions = shuffle(CLONE_POSITIONS)
     const cloneAssignments = Object.fromEntries(
@@ -139,7 +142,7 @@ const BananaCodex: Strategy<Replication2State> = {
       autoAdvance: true,
     },
     {
-      id: 'phase-3',
+      id: 'tethered-player-mechs',
       prompt: 'Move to your assigned position',
       setPlayerPositions: (_, state) => state!.playerPositions,
       hazards: () => [],
@@ -163,8 +166,8 @@ const BananaCodex: Strategy<Replication2State> = {
       autoAdvance: true,
     },
     {
-      id: 'phase-4',
-      prompt: 'Move to your group\'s safe spot',
+      id: 'player-tether-stacks',
+      prompt: "Move to your group's safe spot",
       bosses: [{ pos: { x: 0.5, y: 0.265 }, scale: 1.5 }],
       setPlayerPositions: (_, state) => state!.playerPositions,
       hazards: () => [],
@@ -193,6 +196,82 @@ const BananaCodex: Strategy<Replication2State> = {
         }),
       }),
       tolerance: 0,
+      autoAdvance: true,
+    },
+     {
+      id: 'snaking-kick',
+      prompt: "Stand behind the boss",
+      bosses: [],
+      setPlayerPositions: (_, state) => state!.playerPositions,
+      rollVariant: () => {
+        const rotations = [45, 135, 225, 315]
+        const rotation = rotations[Math.floor(Math.random() * rotations.length)]
+        return { id: `rot-${rotation}`, label: `${rotation}°`, rotation }
+      },
+      hazards: (variant) => variant ? [{
+        id: 'p5-boss',
+        // +180 so the sprite's visual face points in the game-facing direction
+        shape: { type: 'boss' as const, pos: { x: 0.5, y: 0.265 }, rotation: (variant.rotation as number) + 180, scale: 1.5 },
+      }] : [],
+      getSolution: (variant) => {
+        if (!variant) return BOSS_CENTER
+        const bossPos = { x: 0.5, y: 0.265 }
+        const rad = (variant.rotation as number) * Math.PI / 180
+        // facing = (sin, -cos); behind = (-sin, +cos)
+        return { x: bossPos.x - Math.sin(rad) * 0.15, y: bossPos.y + Math.cos(rad) * 0.15 }
+      },
+      getHints: (variant) => {
+        if (!variant) return []
+        const bossPos = { x: 0.5, y: 0.265 }
+        const rad = (variant.rotation as number) * Math.PI / 180
+        const center = { x: bossPos.x - Math.sin(rad) * 0.15, y: bossPos.y + Math.cos(rad) * 0.15 }
+        return [{ id: 'p5-hint', shape: { type: 'circle' as const, pos: center, radius: 0.12 } }]
+      },
+      isCorrect: (click, variant) => {
+        if (!variant) return false
+        const bossPos = { x: 0.5, y: 0.265 }
+        const rad = (variant.rotation as number) * Math.PI / 180
+        const dx = click.x - bossPos.x
+        const dy = click.y - bossPos.y
+        // behind = dot with facing (sin, -cos) < 0
+        return (dx * Math.sin(rad) - dy * Math.cos(rad)) < 0
+      },
+      updateState: (state) => state!,
+      tolerance: 0,
+      autoAdvance: true,
+    },
+    {
+      id: 'near-far',
+      prompt: 'Move to your safe spot',
+      bosses: [{ pos: { x: 0.5, y: 0.265 }, scale: 1.5, rotation: 180 }],
+      setPlayerPositions: (_, state) => state!.playerPositions,
+      hazards: () => [],
+      getSolution: (_, role, state) =>
+        state ? getPhase5Target(role, state.cloneAssignments, state.group1Players) : BOSS_CENTER,
+      getHints: () => [
+        { id: 'hint-p5-cone-g1',  shape: { type: 'circle' as const, pos: PHASE5_POSITIONS.cone_g1,    radius: PHASE5_RADIUS } },
+        { id: 'hint-p5-cone-g2',  shape: { type: 'circle' as const, pos: PHASE5_POSITIONS.cone_g2,    radius: PHASE5_RADIUS } },
+        { id: 'hint-p5-stack-g1', shape: { type: 'circle' as const, pos: PHASE5_POSITIONS.stack_g1,   radius: PHASE5_RADIUS } },
+        { id: 'hint-p5-stack-g2', shape: { type: 'circle' as const, pos: PHASE5_POSITIONS.stack_g2,   radius: PHASE5_RADIUS } },
+        { id: 'hint-p5-rest',     shape: { type: 'circle' as const, pos: PHASE5_POSITIONS.stack_rest, radius: PHASE5_RADIUS } },
+      ],
+      isCorrect: (click, _, role, state) => {
+        if (!state) return false
+        const target = getPhase5Target(role, state.cloneAssignments, state.group1Players)
+        return distance(click, target) <= PHASE5_RADIUS
+      },
+      updateState: (state, _variant, role, click, wasCorrect) => ({
+        ...state!,
+        playerPositions: ALL_ROLES.map((r) => {
+          const target = getPhase5Target(r, state!.cloneAssignments, state!.group1Players)
+          return {
+            role: r,
+            pos: r === role ? (wasCorrect ? target : (click ?? target)) : target,
+          }
+        }),
+      }),
+      tolerance: 0,
+      autoAdvance: true,
     },
   ],
 }
