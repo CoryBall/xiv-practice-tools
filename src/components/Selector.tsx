@@ -11,10 +11,12 @@ export function Selector() {
     selectedStrategyId,
     selectedRole,
     status,
+    startAtPhase,
     selectEncounter,
     selectMechanic,
     selectStrategy,
     selectRole,
+    setStartAtPhase,
     start,
   } = useSimulator()
 
@@ -104,6 +106,23 @@ export function Selector() {
           ))}
         </div>
       </div>
+
+      {selectedStrategy && import.meta.env.DEV && (
+        <div className="selector-row">
+          <label htmlFor="phase-select">Start at phase</label>
+          <select
+            id="phase-select"
+            value={startAtPhase}
+            onChange={(e) => setStartAtPhase(Number(e.target.value))}
+          >
+            {selectedStrategy.phases.map((phase, i) => (
+              <option key={phase.id} value={i}>
+                {i + 1}. {phase.prompt}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       {selectedStrategy?.url && (
         <a className="strategy-link" href={selectedStrategy.url} target="_blank" rel="noreferrer">
