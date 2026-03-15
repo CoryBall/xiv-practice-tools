@@ -16,8 +16,12 @@ import {
   PHASE4_RADIUS,
   PHASE5_POSITIONS,
   PHASE5_RADIUS,
+  PHASE6_POSITIONS,
+  PHASE6_RADIUS,
+  PHASE6_REST_HINT_POS,
+  PHASE6_REST_POS,
 } from "./constants";
-import { buildInitialPlayerPositions, computeGroups, computePhase2, computePhase3, getPhase4Target, getPhase5Target, shuffle } from "./logic";
+import { buildInitialPlayerPositions, computeGroups, computePhase2, computePhase3, getPhase4Target, getPhase5Target, getPhase6Target, shuffle } from "./logic";
 import type { Replication2State } from "./types";
 
 const BananaCodex: Strategy<Replication2State> = {
@@ -264,6 +268,40 @@ const BananaCodex: Strategy<Replication2State> = {
         ...state!,
         playerPositions: ALL_ROLES.map((r) => {
           const target = getPhase5Target(r, state!.cloneAssignments, state!.group1Players)
+          return {
+            role: r,
+            pos: r === role ? (wasCorrect ? target : (click ?? target)) : target,
+          }
+        }),
+      }),
+      tolerance: 0,
+      autoAdvance: true,
+    },
+    {
+      id: 'spread-back',
+      prompt: 'Move to your safe spot',
+      bosses: [{ pos: { x: 0.5, y: 0.265 }, scale: 1.5, rotation: 180 }],
+      setPlayerPositions: (_, state) => state!.playerPositions,
+      hazards: () => [],
+      getSolution: (_, role, state) =>
+        state ? getPhase6Target(role, state.cloneAssignments, state.phase3Assignments) : BOSS_CENTER,
+      getHints: () => [
+        ...Object.values(PHASE6_POSITIONS).map((pos, i) => ({
+          id: `hint-p6-p3-${i}`,
+          shape: { type: 'circle' as const, pos, radius: PHASE3_RADIUS },
+        })),
+        { id: 'hint-p6-rest',      shape: { type: 'circle' as const, pos: PHASE6_REST_POS,      radius: PHASE6_RADIUS } },
+        { id: 'hint-p6-rest-alt',  shape: { type: 'circle' as const, pos: PHASE6_REST_HINT_POS, radius: PHASE6_RADIUS } },
+      ],
+      isCorrect: (click, _, role, state) => {
+        if (!state) return false
+        const target = getPhase6Target(role, state.cloneAssignments, state.phase3Assignments)
+        return distance(click, target) <= PHASE6_RADIUS
+      },
+      updateState: (state, _variant, role, click, wasCorrect) => ({
+        ...state!,
+        playerPositions: ALL_ROLES.map((r) => {
+          const target = getPhase6Target(r, state!.cloneAssignments, state!.phase3Assignments)
           return {
             role: r,
             pos: r === role ? (wasCorrect ? target : (click ?? target)) : target,

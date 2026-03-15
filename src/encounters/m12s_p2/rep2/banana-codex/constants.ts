@@ -8,6 +8,9 @@ export const PHASE3_RADIUS = 0.015
 export const PHASE4_RADIUS = 0.05
 export const PHASE4_CONE_RADIUS = 0.015
 export const PHASE5_RADIUS = 0.01
+export const PHASE6_RADIUS = 0.015
+export const PHASE6_REST_POS:      Vec2 = { x: 0.35, y: 0.3 }
+export const PHASE6_REST_HINT_POS: Vec2 = { x: 0.65, y: 0.3 }
 
 export const PHASE4_POSITIONS = {
   group1:      { x: 0.4,  y: 0.36 },
@@ -31,8 +34,15 @@ export const PHASE3_POSITIONS = {
   N:           { x: 0.5,   y: 0.265 },
   prox_g1:     { x: 0.125, y: 0.575 },
   prox_g2:     { x: 0.875, y: 0.575 },
-  stack_g1:    { x: 0.43, y: 0.3   },
-  stack_g2:    { x: 0.57, y: 0.3   },
+  stack_g1:    { x: 0.43, y: 0.105   },
+  stack_g2:    { x: 0.57, y: 0.105   },
+  cone_g1:     { x: 0.375, y: 0.12  },
+  cone_g2:     { x: 0.625, y: 0.12  },
+} as const
+
+export const PHASE6_POSITIONS = {
+  stack_g1:    { x: 0.43, y: 0.105   },
+  stack_g2:    { x: 0.57, y: 0.105   },
   cone_g1:     { x: 0.375, y: 0.12  },
   cone_g2:     { x: 0.625, y: 0.12  },
 } as const
