@@ -12,6 +12,7 @@ import {
   PHASE4_POSITIONS,
   PHASE5_POSITIONS,
   PHASE6_REST_POS,
+  PHASE6_REST_HINT_POS,
 } from "./constants";
 
 export function shuffle<T>(arr: T[]): T[] {
@@ -150,6 +151,19 @@ export function getPhase6Target(
     return phase3Assignments[role]
   }
   return PHASE6_REST_POS
+}
+
+export function getPhase7Target(
+  role: Role,
+  cloneAssignments: Record<Role, Vec2>,
+  phase3Assignments: Record<Role, Vec2>,
+): Vec2 {
+  const slotIdx = CLONE_POSITIONS.findIndex(p => p.x === cloneAssignments[role].x && p.y === cloneAssignments[role].y)
+  const rule = CLONE_RULES[slotIdx]
+  if (rule?.kind === 'mechanic' && (rule.mechType === 'cone' || rule.mechType === 'stack')) {
+    return phase3Assignments[role]
+  }
+  return PHASE6_REST_HINT_POS
 }
 
 export function buildInitialPlayerPositions(): Replication2State['playerPositions'] {
