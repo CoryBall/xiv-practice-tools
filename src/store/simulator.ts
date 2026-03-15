@@ -50,6 +50,7 @@ interface SimulatorStore {
   userClick: Vec2 | null
   solution: Vec2 | null
   wasCorrect: boolean | null
+  hadMistake: boolean
   npcPositions: Partial<Record<Role, Vec2>>
 
   // Actions
@@ -116,6 +117,7 @@ export const useSimulator = create<SimulatorStore>((set, get) => ({
   userClick: null,
   solution: null,
   wasCorrect: null,
+  hadMistake: false,
   npcPositions: {},
 
   startAtPhase: 0,
@@ -187,6 +189,7 @@ export const useSimulator = create<SimulatorStore>((set, get) => ({
       userClick: null,
       solution: null,
       wasCorrect: null,
+      hadMistake: false,
       npcPositions,
       showHints: strategy.hintsDefault ?? false,
     })
@@ -219,12 +222,13 @@ export const useSimulator = create<SimulatorStore>((set, get) => ({
       ? phase.isCorrect(pos, variant, selectedRole, state)
       : distance(pos, sol) <= (phase.tolerance ?? 0.1)
 
-    set({
+    set((s) => ({
       userClick: pos,
       solution: sol,
       wasCorrect: correct,
+      hadMistake: s.hadMistake || !correct,
       status: 'showing-result',
-    })
+    }))
 
     if (correct && phase.autoAdvance) {
       setTimeout(() => get().nextPhase(), 800)
@@ -296,6 +300,7 @@ export const useSimulator = create<SimulatorStore>((set, get) => ({
       userClick: null,
       solution: null,
       wasCorrect: null,
+      hadMistake: false,
       npcPositions: {},
       showHints: false,
     }),

@@ -294,3 +294,45 @@ body {
   font-size: 1rem;
   color: #aab8ff;
 }
+
+.completion-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  cursor: pointer;
+}
+
+.completion-modal {
+  background: #111128;
+  border: 1px solid #44ff88;
+  border-radius: 12px;
+  padding: 2.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: default;
+  box-shadow: 0 0 40px rgba(68, 255, 136, 0.2);
+}
+
+.completion-icon {
+  font-size: 3rem;
+  color: #44ff88;
+  line-height: 1;
+}
+
+.completion-title {
+  font-size: 1.6rem;
+  font-weight: bold;
+  color: #e0e0ff;
+}
+
+.completion-sub {
+  font-size: 1rem;
+  color: #8888bb;
+  margin-bottom: 0.5rem;
+}

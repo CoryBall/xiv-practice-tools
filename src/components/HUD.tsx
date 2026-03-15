@@ -6,6 +6,7 @@ export function HUD() {
     status,
     phaseIndex,
     wasCorrect,
+    hadMistake,
     variant,
     selectedEncounterId,
     selectedMechanicId,
@@ -30,6 +31,7 @@ export function HUD() {
   const isLastPhase = phaseIndex >= totalPhases - 1
 
   return (
+    <>
     <div className="hud">
       {variant && (
         <div className="hud-variant">Variant: {variant.label}</div>
@@ -77,9 +79,18 @@ export function HUD() {
         )}
       </div>
 
-      {status === 'complete' && (
-        <div className="hud-complete">All phases complete!</div>
-      )}
     </div>
+
+    {status === 'complete' && !hadMistake && (
+      <div className="completion-overlay" onClick={reset}>
+        <div className="completion-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="completion-icon">✓</div>
+          <div className="completion-title">Mechanic Complete!</div>
+          <div className="completion-sub">All positions correct</div>
+          <button className="start-btn" onClick={reset}>Try Again</button>
+        </div>
+      </div>
+    )}
+    </>
   )
 }
