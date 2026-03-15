@@ -103,6 +103,8 @@ export interface Strategy<TState = any, TVariant extends Variant = any> {
   description?: string
   /** Link to an external guide or explanation for this strategy. */
   url?: string
+  /** When true, hints are shown by default when the mechanic starts. */
+  hintsDefault?: boolean
   /** Waymarks placed on the arena for this strategy. Rendered below hazards. */
   waymarks?: Waymark[]
   /** Overrides boss positions for all phases of this strategy. */

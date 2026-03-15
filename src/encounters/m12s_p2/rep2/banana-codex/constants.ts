@@ -5,15 +5,27 @@ export const ALL_ROLES = ['MT', 'OT', 'H1', 'H2', 'M1', 'M2', 'R1', 'R2'] as con
 
 export const CLONE_RADIUS = 0.07
 export const PHASE3_RADIUS = 0.015
-export const PHASE4_RADIUS = 0.04
+export const PHASE4_RADIUS = 0.05
 export const PHASE4_CONE_RADIUS = 0.015
+export const PHASE5_RADIUS = 0.01
+export const PHASE6_RADIUS = 0.015
+export const PHASE6_REST_POS:      Vec2 = { x: 0.35, y: 0.3 }
+export const PHASE6_REST_HINT_POS: Vec2 = { x: 0.65, y: 0.3 }
 
 export const PHASE4_POSITIONS = {
-  group1:      { x: 0.39,  y: 0.365 },
-  group2:      { x: 0.615, y: 0.365 },
+  group1:      { x: 0.4,  y: 0.36 },
+  group2:      { x: 0.6, y: 0.36 },
   cone_group1: { x: 0.425, y: 0.325 },
   cone_group2: { x: 0.575, y: 0.325 },
 } as const
+export const PHASE5_POSITIONS = {
+  cone_g1:    { x: 0.35, y: 0.265 },  // just W of boss, 0.06 from edge
+  cone_g2:    { x: 0.65, y: 0.265 },  // just E of boss, 0.06 from edge
+  stack_g1:   { x: 0.46, y: 0.305 },  // just inside SW edge
+  stack_g2:   { x: 0.54, y: 0.305 },  // just inside SE edge
+  stack_rest: { x: 0.5,  y: 0.17  },  // N edge
+} as const
+
 export const BOSS_CENTER: Vec2 = { x: 0.5, y: 0.5 }
 
 // Phase 3 destination positions by role/mechanic
@@ -22,8 +34,15 @@ export const PHASE3_POSITIONS = {
   N:           { x: 0.5,   y: 0.265 },
   prox_g1:     { x: 0.125, y: 0.575 },
   prox_g2:     { x: 0.875, y: 0.575 },
-  stack_g1:    { x: 0.46, y: 0.1   },
-  stack_g2:    { x: 0.54, y: 0.1   },
+  stack_g1:    { x: 0.43, y: 0.105   },
+  stack_g2:    { x: 0.57, y: 0.105   },
+  cone_g1:     { x: 0.375, y: 0.12  },
+  cone_g2:     { x: 0.625, y: 0.12  },
+} as const
+
+export const PHASE6_POSITIONS = {
+  stack_g1:    { x: 0.43, y: 0.105   },
+  stack_g2:    { x: 0.57, y: 0.105   },
   cone_g1:     { x: 0.375, y: 0.12  },
   cone_g2:     { x: 0.625, y: 0.12  },
 } as const

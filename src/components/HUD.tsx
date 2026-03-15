@@ -6,6 +6,7 @@ export function HUD() {
     status,
     phaseIndex,
     wasCorrect,
+    hadMistake,
     variant,
     selectedEncounterId,
     selectedMechanicId,
@@ -30,14 +31,22 @@ export function HUD() {
   const isLastPhase = phaseIndex >= totalPhases - 1
 
   return (
+    <>
     <div className="hud">
       {variant && (
         <div className="hud-variant">Variant: {variant.label}</div>
       )}
 
-      {currentPhase && (
-        <div className="hud-prompt">{currentPhase.prompt}</div>
-      )}
+      <div className="hud-prompt-row">
+        {currentPhase && (
+          <div className="hud-prompt">{currentPhase.prompt}</div>
+        )}
+        {strategy?.url && (
+          <a className="strategy-link" href={strategy.url} target="_blank" rel="noreferrer">
+            Strategy guide
+          </a>
+        )}
+      </div>
 
       <div className="hud-phase-counter">
         Phase {phaseIndex + 1} / {totalPhases}
@@ -58,11 +67,6 @@ export function HUD() {
             {showHints ? 'Hide Hints' : 'Show Hints'}
           </button>
         )}
-        {strategy?.url && (
-          <a className="strategy-link" href={strategy.url} target="_blank" rel="noreferrer">
-            Strategy guide
-          </a>
-        )}
         {status === 'showing-result' && !isLastPhase && (
           <button className="hud-btn" onClick={nextPhase}>
             Next Phase
@@ -73,16 +77,20 @@ export function HUD() {
             Finish
           </button>
         )}
-        {status === 'complete' && (
-          <button className="hud-btn" onClick={reset}>
-            Play Again
-          </button>
-        )}
       </div>
 
-      {status === 'complete' && (
-        <div className="hud-complete">All phases complete!</div>
-      )}
     </div>
+
+    {status === 'complete' && !hadMistake && (
+      <div className="completion-overlay" onClick={reset}>
+        <div className="completion-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="completion-icon">✓</div>
+          <div className="completion-title">Mechanic Complete!</div>
+          <div className="completion-sub">All positions correct</div>
+          <button className="start-btn" onClick={reset}>Try Again</button>
+        </div>
+      </div>
+    )}
+    </>
   )
 }

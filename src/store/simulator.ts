@@ -50,6 +50,7 @@ interface SimulatorStore {
   userClick: Vec2 | null
   solution: Vec2 | null
   wasCorrect: boolean | null
+  hadMistake: boolean
   npcPositions: Partial<Record<Role, Vec2>>
 
   // Actions
@@ -57,6 +58,8 @@ interface SimulatorStore {
   selectMechanic: (id: string) => void
   selectStrategy: (id: string) => void
   selectRole: (role: Role) => void
+  startAtPhase: number
+  setStartAtPhase: (n: number) => void
   start: () => void
   handleClick: (pos: Vec2) => void
   nextPhase: () => void
@@ -114,7 +117,10 @@ export const useSimulator = create<SimulatorStore>((set, get) => ({
   userClick: null,
   solution: null,
   wasCorrect: null,
+  hadMistake: false,
   npcPositions: {},
+
+  startAtPhase: 0,
 
   // Actions
   selectEncounter: (id) =>
@@ -130,12 +136,14 @@ export const useSimulator = create<SimulatorStore>((set, get) => ({
       selectedStrategyId: null,
     }),
 
-  selectStrategy: (id) => set({ selectedStrategyId: id }),
+  selectStrategy: (id) => set({ selectedStrategyId: id, startAtPhase: 0 }),
 
   selectRole: (role) => set({ selectedRole: role }),
 
+  setStartAtPhase: (n) => set({ startAtPhase: n }),
+
   start: () => {
-    const { selectedEncounterId, selectedMechanicId, selectedStrategyId, selectedRole } = get()
+    const { selectedEncounterId, selectedMechanicId, selectedStrategyId, selectedRole, startAtPhase } = get()
     if (!selectedEncounterId || !selectedMechanicId || !selectedStrategyId || !selectedRole) return
 
     const encounter = encounters.find((e) => e.id === selectedEncounterId)
@@ -143,11 +151,25 @@ export const useSimulator = create<SimulatorStore>((set, get) => ({
     const strategy = mechanic?.strategies.find((s) => s.id === selectedStrategyId)
     if (!strategy) return
 
-    const phase0 = strategy.phases[0]
-    if (!phase0) return
+    const targetIndex = Math.min(startAtPhase, strategy.phases.length - 1)
 
-    const state = strategy.rollState ? strategy.rollState() : (strategy.initialState ?? null)
-    const variant = phase0.rollVariant ? phase0.rollVariant([]) : null
+    // Roll initial state then fast-forward through skipped phases using solution positions
+    let state = strategy.rollState ? strategy.rollState() : (strategy.initialState ?? null)
+    const variantHistory: Variant[] = []
+    for (let i = 0; i < targetIndex; i++) {
+      const phase = strategy.phases[i]!
+      const v = phase.rollVariant ? phase.rollVariant(variantHistory) : null
+      if (v) variantHistory.push(v)
+      const sol = phase.getSolution(v, selectedRole, state)
+      if (phase.updateState) {
+        state = phase.updateState(state, v, selectedRole, sol, true)
+      }
+    }
+
+    const targetPhase = strategy.phases[targetIndex]!
+    const variant = targetPhase.rollVariant ? targetPhase.rollVariant(variantHistory) : null
+    if (variant) variantHistory.push(variant)
+
     const npcPositions = computeNpcPositions(
       variant,
       state,
@@ -155,19 +177,21 @@ export const useSimulator = create<SimulatorStore>((set, get) => ({
       selectedStrategyId,
       selectedMechanicId,
       selectedEncounterId,
-      0,
+      targetIndex,
     )
 
     set({
       status: 'awaiting-click',
-      phaseIndex: 0,
+      phaseIndex: targetIndex,
       variant,
-      variantHistory: variant ? [variant] : [],
+      variantHistory,
       state,
       userClick: null,
       solution: null,
       wasCorrect: null,
+      hadMistake: false,
       npcPositions,
+      showHints: strategy.hintsDefault ?? false,
     })
   },
 
@@ -198,12 +222,13 @@ export const useSimulator = create<SimulatorStore>((set, get) => ({
       ? phase.isCorrect(pos, variant, selectedRole, state)
       : distance(pos, sol) <= (phase.tolerance ?? 0.1)
 
-    set({
+    set((s) => ({
       userClick: pos,
       solution: sol,
       wasCorrect: correct,
+      hadMistake: s.hadMistake || !correct,
       status: 'showing-result',
-    })
+    }))
 
     if (correct && phase.autoAdvance) {
       setTimeout(() => get().nextPhase(), 800)
@@ -275,7 +300,9 @@ export const useSimulator = create<SimulatorStore>((set, get) => ({
       userClick: null,
       solution: null,
       wasCorrect: null,
+      hadMistake: false,
       npcPositions: {},
+      showHints: false,
     }),
 
   showHints: false,
